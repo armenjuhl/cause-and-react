@@ -1,4 +1,4 @@
-import { Card, CardBody, CardImg, CardText, CardTitle } from "reactstrap";
+import {Card, CardBody, CardImg, CardText, CardTitle} from "reactstrap";
 import React from "react";
 import * as moment from 'moment';
 
@@ -46,6 +46,7 @@ const DishDetail = (props) => {
   console.log('\nDish detail props.dish', props.dish);
   if (props.dish != null) {
     return (
+        <div className="container">
           <div className="row">
             <RenderDish dish={props.dish}/>
             <div className="col-xs-12 col-md-5 m-1">
@@ -53,6 +54,7 @@ const DishDetail = (props) => {
               <RenderComments comments={props.dish.comments}/>
             </div>
           </div>
+        </div>
     );
   } else {
     return (<div></div>)

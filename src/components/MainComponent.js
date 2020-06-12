@@ -5,6 +5,8 @@ import '../App.css';
 import Menu from '../components/MenuComponent';
 import { DISHES } from '../shared/dishes';
 import DishDetail from "../components/DishDetailComponent";
+import Header from '../components/HeaderComponent';
+import Footer from '../components/FooterComponent';
 
 
 class Main extends Component {
@@ -29,15 +31,10 @@ class Main extends Component {
   render() {
     return (
         <div>
-          <Navbar dark color="primary">
-            <div className="container">
-              <NavbarBrand href="/">Ristorante Con Fusion</NavbarBrand>
-            </div>
-          </Navbar>
+          <Header />
           <Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />
-          <div className="container">
-            <DishDetail dish={this.state.dishes.filter((dish) => dish.id === this.state.selectedDish)[0]} />
-          </div>
+          <DishDetail dish={this.state.dishes.filter((dish) => dish.id === this.state.selectedDish)[0]} />
+          <Footer />
         </div>
     );
   }

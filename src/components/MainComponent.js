@@ -7,6 +7,7 @@ import Footer from '../components/FooterComponent';
 import Home from '../components/HomeComponent';
 import DishDetail from '../components/DishDetailComponent';
 import Contact from '../components/ContactComponent';
+import About from '../components/AboutComponent';
 import {COMMENTS} from '../shared/comments';
 import {PROMOTIONS} from '../shared/promotions';
 import {LEADERS} from '../shared/leaders';
@@ -55,6 +56,7 @@ class Main extends Component {
             <Route path="/home" component={HomePage}/>
             {/* If I need to pass a component props use Route format below */}
             <Route exact path="/menu" component={() => <Menu dishes={this.state.dishes}/>}/>
+            <Route exact path="/aboutus" component={() => <About leaders={this.state.leaders}/>}/>
             <Route path="/menu/:dishId" component={DishWithId}/>
             <Route exact path="/contactus" component={Contact}/>
             <Redirect to="/home"/>

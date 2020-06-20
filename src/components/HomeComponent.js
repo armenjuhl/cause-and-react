@@ -2,8 +2,8 @@ import React from 'react';
 import { Card, CardImg, CardText, CardBody,
   CardTitle, CardSubtitle} from 'reactstrap';
 
-function RenderCard({item}) {
 
+function RenderCard({item}) {
   return(
       <Card>
         <CardImg src={item.image} alt={item.name} />

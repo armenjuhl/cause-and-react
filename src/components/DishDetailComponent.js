@@ -31,14 +31,13 @@ class CommentForm extends Component {
   }
 
   handleSubmit(values) {
-    console.log("\mState is: " + JSON.stringify(values));
-    alert("\nCurrent State is : " + JSON.stringify(values));
     this.toggleModal();
+    this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
     return (
-        <>
+        <React.fragment>
           <Button outline onClick={this.toggleModal}>
             <span className="fa fa-pencil fa-lg"></span> Submit Comment
           </Button>
@@ -95,7 +94,7 @@ class CommentForm extends Component {
               </LocalForm>
             </ModalBody>
           </Modal>
-        </>
+        </React.fragment>
     );
   }
 }
@@ -117,7 +116,7 @@ function RenderDish({dish}) {
     );
 }
 
-function RenderComments({comments}) {
+function RenderComments({comments, addComment, dishId}) {
   if (comments == null) {
     return (<div></div>)
   } else {
@@ -127,14 +126,17 @@ function RenderComments({comments}) {
           const date = moment(str);
           const dateComponent = date.utc().format('MMM, DD, YYYY');
           return (
-              <ul key={comment.id} className="list-unstyled">
-                <li>
-                  {comment.comment}
-                </li>
-                <li>
-                  -- {comment.author}, {dateComponent}
-                </li>
-              </ul>
+              <div>
+                <ul key={comment.id} className="list-unstyled">
+                  <li>
+                    {comment.comment}
+                  </li>
+                  <li>
+                    -- {comment.author}, {dateComponent}
+                  </li>
+                </ul>
+                <CommentForm dishId={dishId} addComment={addComment} />
+              </div>
           );
         })
     );
@@ -160,8 +162,10 @@ const DishDetail = (props) => {
               <RenderDish dish={props.dish}/>
             </div>
             <div className="col-12 col-md-5 m-1">
-              <RenderComments comments={props.comments}/>
-              <CommentForm/>
+              <RenderComments comments={props.comments}
+                              addComment={props.addComment}
+                              dishId={props.dish.id}
+              />
             </div>
           </div>
         </div>

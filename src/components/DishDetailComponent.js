@@ -4,7 +4,7 @@ import {
 } from 'reactstrap';
 import {Control, LocalForm, Errors} from 'react-redux-form';
 import {Link} from 'react-router-dom';
-
+import {Loading} from './LoadingComponent';
 import * as moment from 'moment';
 
 const required = (val) => val && val.length;
@@ -32,12 +32,16 @@ class CommentForm extends Component {
 
   handleSubmit(values) {
     this.toggleModal();
+    console.log('\n\n\nCHECK ADD COMMENT\n\n\n1 ' + this.props.addComment);
+    // console.log('\n\nSubmit Values: ' + JSON.stringify(values));
     this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
+    console.log("\nADD COMMENT IN DISHDETAIL: " + this.props.addComment);
+    console.log("\nPROPS IN DISHDETAIL: " + JSON.stringify(this.props));
     return (
-        <React.fragment>
+        <React.Fragment>
           <Button outline onClick={this.toggleModal}>
             <span className="fa fa-pencil fa-lg"></span> Submit Comment
           </Button>
@@ -94,12 +98,13 @@ class CommentForm extends Component {
               </LocalForm>
             </ModalBody>
           </Modal>
-        </React.fragment>
+        </React.Fragment>
     );
   }
 }
 
 function RenderDish({dish}) {
+  console.log("DISH: " + JSON.stringify(dish));
   if (dish !== null) {
     return (
         <Card>
@@ -120,8 +125,7 @@ function RenderComments({comments, addComment, dishId}) {
   if (comments == null) {
     return (<div></div>)
   } else {
-    return (
-        comments.map((comment) => {
+    const mappedComments = comments.map((comment) => {
           const str = comment.date;
           const date = moment(str);
           const dateComponent = date.utc().format('MMM, DD, YYYY');
@@ -135,16 +139,44 @@ function RenderComments({comments, addComment, dishId}) {
                     -- {comment.author}, {dateComponent}
                   </li>
                 </ul>
-                <CommentForm dishId={dishId} addComment={addComment} />
               </div>
-          );
-        })
+          )
+        }
     );
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col-md-12">
+            {mappedComments}
+          </div>
+          <div className="col-md-12">
+            <CommentForm dishId={dishId} addComment={addComment}/>
+          </div>
+        </div>
+    </div>);
   }
 }
 
 const DishDetail = (props) => {
-  if (props.dish !== null) {
+  console.log('\nPROPS: ' + JSON.stringify(props));
+  if (props.isLoading) {
+    return (
+        <div className="container">
+          <div className="row">
+            <Loading/>
+          </div>
+        </div>
+    );
+  } else if (props.errMess) {
+    return (
+        <div className="container">
+          <div className="row">
+            <h4>{props.errMess}</h4>
+          </div>
+        </div>
+    );
+  } else if (props.dish != null) {
+    console.log('DISH: ' + JSON.stringify(props.dish));
     return (
         <div className="container">
           <div className="row">

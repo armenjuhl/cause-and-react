@@ -9,7 +9,8 @@ import Contact from '../components/ContactComponent';
 import About from '../components/AboutComponent';
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
-import { addComment, fetchDishes } from '../redux/ActionCreators';
+import { actions } from 'react-redux-form';
+import { addComment, fetchDishes, fetchComments, fetchPromos } from '../redux/ActionCreators';
 
 const mapStateToProps = state => {
   return {
@@ -20,9 +21,12 @@ const mapStateToProps = state => {
   }
 };
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
-  fetchDishes: () => {dispatch(fetchDishes())}
+  fetchDishes: () => { dispatch(fetchDishes())},
+  resetFeedbackForm: () => { dispatch(actions.reset('feedback'))},
+  fetchComments: () => dispatch(fetchComments()),
+  fetchPromos: () => dispatch(fetchPromos())
 });
 
 class Main extends Component {
@@ -33,33 +37,36 @@ class Main extends Component {
 
   componentDidMount() {
     this.props.fetchDishes();
+    this.props.fetchComments();
+    this.props.fetchPromos();
   }
 
   render() {
-  // console.log('\n\n\nADD COMMENT IN MAIN' + JSON.stringify(addComment));
-    console.log("\n HOME PAGE ADD COMMENT: " + this.props.addComment);
     const HomePage = () => {
+      console.log('\n\n***ATTENTION\nCOMMENTS : ' + JSON.stringify(this.props.comments));
+
       return(
           <Home
               dish={this.props.dishes.dishes.filter((dish) => dish.featured)[0]}
               dishesLoading={this.props.dishes.isLoading}
-              dishesErrMess={this.props.dishes.errMess}
-              promotion={this.props.promotions.filter((promo) => promo.featured)[0]}
+              dishErrMess={this.props.dishes.errMess}
+              promotion={this.props.promotions.promotions.filter((promo) => promo.featured)[0]}
+              promoLoading={this.props.promotions.isLoading}
+              promoErrMess={this.props.promotions.errMess}
               leader={this.props.leaders.filter((leader) => leader.featured)[0]}
           />
       );
     };
 
     const DishWithId = ({match}) => {
-      // const addComment=this.props.addComment;
-      console.log("\n\n\n\n***ATTENTION***\n\n\n ADD COMMENT MAIN COMPONENT: " + this.props.addComment);
-      // console.log("\n\n\n\n***ATTENTION***\n\n\n PROPS MAIN COMPONENT" + JSON.stringify(this.props));
+      console.log("LISTEN HERE\n\n\n" + JSON.stringify(this.props.comments));
       return(
           <DishDetail dish={this.props.dishes.dishes.filter((dish) => dish.id === parseInt(match.params.dishId,10))[0]}
-                      addComment={this.props.addComment}
                       isLoading={this.props.dishes.isLoading}
                       errMess={this.props.dishes.errMess}
-                      comments={this.props.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
+                      comments={this.props.comments.comments.filter((comment) => comment.dishId === parseInt(match.params.dishId,10))}
+                      commentsErrMess={this.props.comments.errMess}
+                      addComment={this.props.addComment}
           />
       );
     };
@@ -73,7 +80,7 @@ class Main extends Component {
             <Route exact path="/menu" component={() => <Menu dishes={this.props.dishes}/>}/>
             <Route exact path="/aboutus" component={() => <About leaders={this.props.leaders}/>}/>
             <Route path="/menu/:dishId" component={DishWithId}/>
-            <Route exact path="/contactus" component={Contact}/>
+            <Route exact path='/contactus' component={() => <Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
             <Redirect to="/home"/>
           </Switch>
           <Footer/>

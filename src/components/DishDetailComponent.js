@@ -6,6 +6,7 @@ import {Control, LocalForm, Errors} from 'react-redux-form';
 import {Link} from 'react-router-dom';
 import {Loading} from './LoadingComponent';
 import * as moment from 'moment';
+import { baseUrl } from '../shared/baseUrl';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -32,14 +33,10 @@ class CommentForm extends Component {
 
   handleSubmit(values) {
     this.toggleModal();
-    console.log('\n\n\nCHECK ADD COMMENT\n\n\n1 ' + this.props.addComment);
-    // console.log('\n\nSubmit Values: ' + JSON.stringify(values));
     this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
   }
 
   render() {
-    console.log("\nADD COMMENT IN DISHDETAIL: " + this.props.addComment);
-    console.log("\nPROPS IN DISHDETAIL: " + JSON.stringify(this.props));
     return (
         <React.Fragment>
           <Button outline onClick={this.toggleModal}>
@@ -104,11 +101,10 @@ class CommentForm extends Component {
 }
 
 function RenderDish({dish}) {
-  console.log("DISH: " + JSON.stringify(dish));
   if (dish !== null) {
     return (
         <Card>
-          <CardImg width="100%" src={dish.image} alt={dish.name}/>
+          <CardImg top src={baseUrl + dish.image} alt={dish.name} />
           <CardBody>
             <CardTitle>{dish.name}</CardTitle>
             <CardText>{dish.description}</CardText>
@@ -144,21 +140,20 @@ function RenderComments({comments, addComment, dishId}) {
         }
     );
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12">
-            {mappedComments}
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              {mappedComments}
+            </div>
+            <div className="col-md-12">
+              <CommentForm dishId={dishId} addComment={addComment}/>
+            </div>
           </div>
-          <div className="col-md-12">
-            <CommentForm dishId={dishId} addComment={addComment}/>
-          </div>
-        </div>
-    </div>);
+        </div>);
   }
 }
 
 const DishDetail = (props) => {
-  console.log('\nPROPS: ' + JSON.stringify(props));
   if (props.isLoading) {
     return (
         <div className="container">
@@ -176,7 +171,6 @@ const DishDetail = (props) => {
         </div>
     );
   } else if (props.dish != null) {
-    console.log('DISH: ' + JSON.stringify(props.dish));
     return (
         <div className="container">
           <div className="row">

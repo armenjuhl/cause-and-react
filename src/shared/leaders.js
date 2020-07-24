@@ -29,7 +29,7 @@ export const LEADERS = [
   {
     id: 3,
     name: 'Armen Juhl',
-    image: 'images/armen-pic.png',
+    image: 'images/alberto.png',
     designation: 'Executive Chef',
     abbr: 'EC',
     featured: true,

@@ -2,26 +2,26 @@ import * as ActionTypes from './ActionTypes';
 import {baseUrl} from '../shared/baseUrl';
 
 export const fetchDishes = () => (dispatch) => {
+
   dispatch(dishesLoading(true));
 
   return fetch(baseUrl + 'dishes')
       .then(response => {
-        if (response.ok) {
-          return response;
-        }
-        else {
-          var error = new Error('Error' + response.status + ': ' + response.statusText);
-          error.response = response;
-          throw error;
-        }
-      },
+            if (response.ok) {
+              return response;
+            } else {
+              var error = new Error('Error ' + response.status + ': ' + response.statusText);
+              error.response = response;
+              throw error;
+            }
+          },
           error => {
-        var errmess = new Error(error.message);
-        throw errmess;
+            var errmess = new Error(error.message);
+            throw errmess;
           })
       .then(response => response.json())
       .then(dishes => dispatch(addDishes(dishes)))
-  .catch(error => dispatch(dishesFailed(error.message)));
+      .catch(error => dispatch(dishesFailed(error.message)));
 };
 
 export const dishesLoading = () => ({
@@ -43,9 +43,8 @@ export const fetchComments = () => (dispatch) => {
       .then(response => {
             if (response.ok) {
               return response;
-            }
-            else {
-              var error = new Error('Error' + response.status + ': ' + response.statusText);
+            } else {
+              var error = new Error('Error ' + response.status + ': ' + response.statusText);
               error.response = response;
               throw error;
             }
@@ -59,15 +58,47 @@ export const fetchComments = () => (dispatch) => {
       .catch(error => dispatch(commentsFailed(error.message)));
 };
 
-export const addComment = (dishId, rating, author, comment) => ({
-  type: ActionTypes.ADD_COMMENTS,
-  payload: {
+export const addComment = (comment) => ({
+  type: ActionTypes.ADD_COMMENT,
+  payload: comment
+});
+
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+
+  const newComment = {
+    comment: comment,
     dishId: dishId,
     rating: rating,
     author: author,
-    comment: comment,
-  }
-});
+  };
+
+  newComment.date = new Date().toISOString();
+
+  return fetch(baseUrl + 'comments', {
+    method: 'POST',
+    body: JSON.stringify(newComment),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'same-origin'
+  })
+      .then(response => {
+            if (response.ok) {
+              return response;
+            } else {
+              var error = new Error('Error ' + response.status + ': ' + response.statusText);
+              error.response = response;
+              throw error;
+            }},
+          error => {
+            var errmess = new Error(error.message);
+            throw errmess;
+          })
+      .then(response => response.json())
+      .then(response => dispatch(addComment(response)))
+      .then(error => { console.log('Post comments ', error.message);
+      alert('Your comment could not be posted\nError: ' + error.message)})
+};
 
 export const commentsFailed = (errmess) => ({
   type: ActionTypes.COMMENTS_FAILED,
@@ -88,9 +119,8 @@ export const fetchPromos = () => (dispatch) => {
       .then(response => {
             if (response.ok) {
               return response;
-            }
-            else {
-              var error = new Error('Error' + response.status + ': ' + response.statusText);
+            } else {
+              var error = new Error('Error ' + response.status + ': ' + response.statusText);
               error.response = response;
               throw error;
             }
@@ -102,8 +132,8 @@ export const fetchPromos = () => (dispatch) => {
       .then(response => response.json())
       .then(promos => dispatch(addPromos(promos)))
       .catch(error => dispatch(promosFailed(error.message)));
-  ;
 };
+
 
 export const promosLoading = () => ({
   type: ActionTypes.PROMOS_LOADING

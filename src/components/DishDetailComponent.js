@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom';
 import {Loading} from './LoadingComponent';
 import * as moment from 'moment';
 import {baseUrl} from '../shared/baseUrl';
-import {FadeTransform, Fade, Stagger} from 'react-animation-components';
+import {FadeTransform, Stagger} from 'react-animation-components';
 
 const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
@@ -136,9 +136,8 @@ function RenderComments({comments, postComment, dishId}) {
                 <ul key={comment.id} className="list-unstyled">
                   <Stagger in>
                     <li key={comment.id}>
-                      {comment.comment}
                       <p>{comment.comment}</p>
-                      <p>-- {comment.author}, {dateComponent}</p>
+                      <p>-- {comment.author}- {dateComponent}</p>
                     </li>
                   </Stagger>
                 </ul>

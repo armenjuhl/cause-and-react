@@ -2,25 +2,30 @@ import React from 'react';
 import {Breadcrumb, BreadcrumbItem, Card, CardBody, CardHeader, Media} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {baseUrl} from '../shared/baseUrl';
-
+import {Fade, FadeTransform, Stagger} from 'react-animation-components';
 
 function RenderLeader({leader}) {
   console.log('LEADER: ' + JSON.stringify(leader));
   return (
-      <Media className="mb-3">
-        <Media className="mr-5" left href={leader.image} target="_blank">
-          <Media object src={baseUrl + leader.image} alt="Leader image"/>
-        </Media>
-        <Media body>
-          <Media heading>
-            {leader.name}
+      <FadeTransform in
+                     transformProps={{
+                       exitTransform: 'scale(0.5) translateY(-50%)'
+                     }}>
+        <Media className="mb-3">
+          <Media className="mr-5" left href={leader.image} target="_blank">
+            <Media object src={baseUrl + leader.image} alt="Leader image"/>
           </Media>
-          {leader.designation}
-          <br/>
-          <br/>
-          {leader.description}
+          <Media body>
+            <Media heading>
+              {leader.name}
+            </Media>
+            {leader.designation}
+            <br/>
+            <br/>
+            {leader.description}
+          </Media>
         </Media>
-      </Media>
+      </FadeTransform>
   );
 }
 

@@ -13,9 +13,6 @@ const required = (val) => val && val.length;
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
 
-const commentStyle = {
-  color: "gray"
-};
 
 class CommentForm extends Component {
 

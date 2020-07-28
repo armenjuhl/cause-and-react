@@ -10,7 +10,14 @@ import About from '../components/AboutComponent';
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import {connect} from 'react-redux';
 import { actions } from 'react-redux-form';
-import { postComment, fetchDishes, fetchComments, fetchPromos, fetchLeaders, postFeedback } from '../redux/ActionCreators';
+import {
+  postComment,
+  fetchDishes,
+  fetchComments,
+  fetchPromos,
+  fetchLeaders,
+  postFeedback
+} from '../redux/ActionCreators';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const mapStateToProps = state => {
@@ -58,6 +65,8 @@ class Main extends Component {
               promoLoading={this.props.promotions.isLoading}
               promoErrMess={this.props.promotions.errMess}
               leader={this.props.leaders.filter((leader) => leader.featured)[0]}
+              leadersLoading={this.props.leaders.leadersLoading}
+              leaderErrMess={this.props.leaders.errMess}
           />
       );
     };

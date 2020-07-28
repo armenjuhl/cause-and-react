@@ -172,7 +172,6 @@ export const fetchLeaders = () => (dispatch) => {
       .catch(error => dispatch(leadersFailed(error.message)));
 };
 
-
 export const leadersLoading = () => ({
   type: ActionTypes.LEADERS_LOADING
 });

@@ -56,9 +56,9 @@ class CommentForm extends Component {
                 </div>
                 <div className="form-group">
                   <Label htmlFor="formName">Your Name</Label>
-                  <Control.text model=".formName"
-                                name="formName"
-                                id="formName"
+                  <Control.text model=".author"
+                                name="author"
+                                id="author"
                                 className="form-control"
                                 placeholder="Your Name"
                                 validators={{
@@ -121,6 +121,7 @@ function RenderDish({dish}) {
 }
 
 function RenderComments({comments, postComment, dishId}) {
+  console.log('\n\n\nATTENTION.\nCOMMENTS: ' + JSON.stringify(comments));
   if (comments == null) {
     return (<div></div>)
   } else {
